@@ -12,4 +12,4 @@ libdrihybris_la_LDFLAGS = \
 	-avoid-version \
 	$()
 
-sdk_HEADERS = drihybris.h
+sdk_HEADERS = drihybris.h drihybrisproto.h

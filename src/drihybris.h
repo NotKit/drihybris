@@ -26,7 +26,7 @@
 #define DRIHYBRIS
 #ifdef DRIHYBRIS
 
-#include <X11/extensions/drihybrisproto.h>
+#include "drihybrisproto.h"
 #include <randrstr.h>
 
 #define DRIHYBRIS_SCREEN_INFO_VERSION        1
