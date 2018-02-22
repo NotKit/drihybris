@@ -1,0 +1,26 @@
+Source: drihybris
+Priority: medium
+Maintainer: TheKit <nekit1000@gmail.com>
+Build-Depends: debhelper (>= 9.0.0),
+               autotools-dev,
+               dh-autoreconf,
+               xserver-xorg-dev,
+               libxi-dev,
+Standards-Version: 3.9.8
+Section: libs
+Homepage: https://github.com/gemian/drihybris
+Vcs-Git: https://github.com/gemian/drihybris.git
+
+Package: drihybris1
+Architecture: armhf arm64 i386 amd64
+Depends: ${shlibs:Depends},
+         ${misc:Depends}
+Description: custom DRI3-based Xorg extension for use with libhybris.
+
+Package: drihybris-dev
+Section: libdevel
+Architecture: armhf arm64 i386 amd64
+Depends: libandroid-properties1 (= ${binary:Version}),
+         ${misc:Depends}
+Description: Development headers files for drihybris
+ Contains the development files.
