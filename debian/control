@@ -6,12 +6,13 @@ Build-Depends: debhelper (>= 9.0.0),
                dh-autoreconf,
                xserver-xorg-dev,
                libxi-dev,
+               xutils-dev
 Standards-Version: 3.9.8
 Section: libs
 Homepage: https://github.com/gemian/drihybris
 Vcs-Git: https://github.com/gemian/drihybris.git
 
-Package: drihybris1
+Package: drihybris
 Architecture: armhf arm64 i386 amd64
 Depends: ${shlibs:Depends},
          ${misc:Depends}

@@ -1,7 +1,23 @@
 #!/usr/bin/make -f
 
-# Uncomment this to turn on verbose mode.
-export DH_VERBOSE=1
+override_dh_auto_configure:
+	dh_auto_configure -- \
+		--libdir=\$${exec_prefix}/lib
+
+# Install in debian/tmp to retain control through dh_install:
+override_dh_auto_install:
+	dh_auto_install --destdir=debian/tmp
+
+# Kill *.la files, and forget no-one:
+override_dh_install:
+	find debian/tmp -name '*.la' -delete
+	sed -i -e 's@"drihybrisproto.h"@<X11/extensions/drihybrisproto.h>@g' \
+		debian/tmp/usr/include/xorg/drihybris.h
+	dh_install --fail-missing
+
+# That's a plugin, use appropriate warning level:
+override_dh_shlibdeps:
+	dh_shlibdeps -- --warnings=6
 
 %:
-	dh $@
+	dh $@ --with xsf --builddirectory=build/
