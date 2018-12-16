@@ -74,6 +74,7 @@ drihybris_pixmap_from_buffer(PixmapPtr *ppixmap, ScreenPtr screen,
                     int numInts, int *ints, int numFds, int *fds);
 
 int
-drihybris_fd_from_pixmap(int *pfd, PixmapPtr pixmap, CARD16 *stride, CARD32 *size);
+drihybris_buffer_from_pixmap(PixmapPtr pixmap, CARD16 *stride,
+                             int *numInts, int **ints, int *numFds, int **fds);
 
 #endif /* _DRIHYBRISPRIV_H_ */

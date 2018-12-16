@@ -96,9 +96,10 @@ typedef struct {
     CARD16  stride B16;
     CARD8   depth;
     CARD8   bpp;
-    CARD32  pad20 B32;
-    CARD32  pad24 B32;
-    CARD32  pad28 B32;
+    CARD16  numInts B16;
+    CARD16  numFds B16;
+    CARD32  pad2 B32;
+    CARD32  pad3 B32;
 } xDRIHYBRISBufferFromPixmapReply;
 #define sz_xDRIHYBRISBufferFromPixmapReply   32
 

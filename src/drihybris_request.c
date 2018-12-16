@@ -145,6 +145,9 @@ proc_drihybris_buffer_from_pixmap(ClientPtr client)
     int rc;
     int fd;
     PixmapPtr pixmap;
+    int *fds, *ints;
+    int numInts, numFds, repSize;
+    char *repFull;
 
     REQUEST_SIZE_MATCH(xDRIHYBRISBufferFromPixmapReq);
     rc = dixLookupResourceByType((void **) &pixmap, stuff->pixmap, RT_PIXMAP,
@@ -159,24 +162,43 @@ proc_drihybris_buffer_from_pixmap(ClientPtr client)
     rep.depth = pixmap->drawable.depth;
     rep.bpp = pixmap->drawable.bitsPerPixel;
 
-    rc = drihybris_fd_from_pixmap(&fd, pixmap, &rep.stride, &rep.size);
+    rc = drihybris_buffer_from_pixmap(pixmap, &rep.stride,
+                                      &numInts, &ints, &numFds, &fds);
     if (rc != Success)
         return rc;
+
+    rep.numInts = (unsigned short)numInts;
+    rep.numFds = (unsigned short)numFds;
+    rep.nfd = numFds;
+    rep.length = numInts;
 
     if (client->swapped) {
         swaps(&rep.sequenceNumber);
         swapl(&rep.length);
-        swapl(&rep.size);
         swaps(&rep.width);
         swaps(&rep.height);
         swaps(&rep.stride);
-    }
-    if (WriteFdToClient(client, fd, TRUE) < 0) {
-        close(fd);
-        return BadAlloc;
+        swaps(&rep.numInts);
+        swaps(&rep.numFds);
     }
 
-    WriteToClient(client, sizeof(rep), &rep);
+    repSize = sizeof(rep) + numInts * sizeof(int);
+    repFull = malloc(repSize);
+    memcpy(repFull, &rep, sizeof(rep));
+    memcpy((repFull + sizeof(rep)), ints, numInts * sizeof(int));
+
+    for (int i = 0; i < numFds; i++) {
+        if (WriteFdToClient(client, fds[i], TRUE) < 0) {
+            close(fd);
+            return BadAlloc;
+        }
+    }
+
+    WriteToClient(client, repSize, (xDRIHYBRISBufferFromPixmapReply*)repFull);
+
+    free(repFull);
+    free(ints);
+    free(fds);
 
     return Success;
 }

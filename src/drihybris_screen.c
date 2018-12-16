@@ -51,20 +51,22 @@ drihybris_pixmap_from_buffer(PixmapPtr *ppixmap, ScreenPtr screen,
 }
 
 int
-drihybris_fd_from_pixmap(int *pfd, PixmapPtr pixmap, CARD16 *stride, CARD32 *size)
+drihybris_buffer_from_pixmap(PixmapPtr pixmap, CARD16 *stride,
+                            int *numInts, int **ints, int *numFds, int **fds)
 {
     ScreenPtr                   screen = pixmap->drawable.pScreen;
     drihybris_screen_priv_ptr   ds = drihybris_screen_priv(screen);
     drihybris_screen_info_ptr   info = ds->info;
-    int                         fd;
+    int                         err;
 
-    if (!info || !info->fd_from_pixmap)
+    if (!info || !info->buffer_from_pixmap)
         return BadImplementation;
 
-    fd = (*info->fd_from_pixmap)(screen, pixmap, stride, size);
-    if (fd < 0)
+    err = (*info->buffer_from_pixmap)(screen, pixmap, stride,
+                                      numInts, ints, numFds, fds);
+    if (err)
         return BadAlloc;
-    *pfd = fd;
+
     return Success;
 }
 

@@ -49,17 +49,18 @@ typedef PixmapPtr (*drihybris_pixmap_from_buffer_proc) (ScreenPtr screen,
                                                int numInts, int *ints,
                                                int numFds, int *fds);
 
-typedef int (*drihybris_fd_from_pixmap_proc) (ScreenPtr screen,
+typedef int (*drihybris_buffer_from_pixmap_proc) (ScreenPtr screen,
                                          PixmapPtr pixmap,
                                          CARD16 *stride,
-                                         CARD32 *size);
+                                         int *numInts, int **ints,
+                                         int *numFds, int **fds);
 
 typedef struct drihybris_screen_info {
     uint32_t                    version;
 
     drihybris_open_proc                open;
     drihybris_pixmap_from_buffer_proc  pixmap_from_buffer;
-    drihybris_fd_from_pixmap_proc      fd_from_pixmap;
+    drihybris_buffer_from_pixmap_proc  buffer_from_pixmap;
 
     /* Version 1 */
     drihybris_open_client_proc         open_client;
